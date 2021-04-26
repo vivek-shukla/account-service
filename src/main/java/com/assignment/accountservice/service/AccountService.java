@@ -67,13 +67,19 @@ public class AccountService {
 	public AccountResponseModel createAccount(AccountRequestModel accountDTO) throws AccountServiceException {		
 		LOGGER.debug("AccountService :: createAccount Invoked");
 		Validator.validateCurrency(accountDTO.getCurrencies());
-		Account account = new Account();
-		account.setCustomerId(accountDTO.getCustomerId());
-		account.setBalance(Constants.ZERO_DOUBLE);
-		account.setCountry(accountDTO.getCountry());
-		accountMapper.insert(account);
-		account.setAccountId(accountMapper.findByCustomerId(accountDTO.getCustomerId()));
-		return populateCurrencyWalletAndResponseModel(account,accountDTO.getCurrencies());
+		if(accountMapper.findByCustomerId(accountDTO.getCustomerId()) == null) {
+			Account account = new Account();
+			account.setCustomerId(accountDTO.getCustomerId());
+			account.setBalance(Constants.ZERO_DOUBLE);
+			account.setCountry(accountDTO.getCountry());
+			accountMapper.insert(account);
+			account.setAccountId(accountMapper.findByCustomerId(accountDTO.getCustomerId()));
+			return populateCurrencyWalletAndResponseModel(account,accountDTO.getCurrencies());
+		}else {
+			LOGGER.error("Account Exist for customer id :: {}",accountDTO.getCustomerId());
+			throw new AccountServiceException(ErrorCode.ACCOUNT_EXIST, Constants.ACCOUNT_EXIST);
+		
+		}
 	}
     
 	/*
@@ -237,17 +243,18 @@ public class AccountService {
 	 * @return List of Transactions
 	 */
 	public List<TransactionResponseModel> fetchTransactionByAccountId(Long accountId) throws AccountServiceException {
-		List<Transaction> transactions = transactionMapper.findByAccountId(accountId);
-		if(!CollectionUtils.isEmpty(transactions)) {
+		
+		return Optional.ofNullable(accountMapper.findByAccountId(accountId))
+		.map(acc -> {
+			List<Transaction> transactions = transactionMapper.findByAccountId(accountId);
 			return transactions.stream().map(tr -> {
 				return getTransactionResponseModel(tr,currencyExchangeRateMapper.findAll().stream()
 						.filter(cer -> tr.getCurrencyId() == cer.getCurrencyId()).findAny().orElse(null));
 			}).collect(Collectors.toList());
-		}
-		else {
+		}).orElseThrow(()->{
 			LOGGER.error("No transactions available for account id :: {}",accountId);
-			throw new AccountServiceException(ErrorCode.ACCOUNT_NOT_FOUND, Constants.ACCOUNT_MISSING);
-		}
+			return new AccountServiceException(ErrorCode.ACCOUNT_NOT_FOUND, Constants.ACCOUNT_MISSING);
+		});
 	}
 	
 	/*

@@ -2,8 +2,6 @@ package com.assignment.accountservice.domain.statechange;
 
 import java.util.List;
 
-import com.assignment.accountservice.model.CurrencyBalance;
-
 public class AccountStateChange { 
 	
     private String customerId;

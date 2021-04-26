@@ -57,6 +57,8 @@ public final class Constants {
 	public static final String ROUTING_KEY = "transation-routing-queue";
 
 	public static final Integer TWO = 2;
+
+	public static final String ACCOUNT_EXIST = "Account Exist for this customer";
 	
 
 }
