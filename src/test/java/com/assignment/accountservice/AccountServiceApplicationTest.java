@@ -174,7 +174,7 @@ public class AccountServiceApplicationTest {
 		ResponseEntity<String> response = testRestTemplate.exchange(uri.toString(), HttpMethod.POST, requestEntity,String.class);
 		assertNotNull(response);
 		assertEquals(ErrorCode.ACCOUNT_NOT_FOUND.getErrorStatus(), response.getStatusCode());
-		assertNull(response.getBody());
+		assertEquals(Constants.ACCOUNT_MISSING,response.getBody());
 	}
 	
 	@Test

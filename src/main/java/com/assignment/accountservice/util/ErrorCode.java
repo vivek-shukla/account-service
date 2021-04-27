@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 
 public enum ErrorCode {
     
-	ACCOUNT_NOT_FOUND(HttpStatus.NO_CONTENT),
+	ACCOUNT_NOT_FOUND(HttpStatus.OK),
 	INVALID_CURRENCY(HttpStatus.BAD_REQUEST), 
 	INVALID_TRANSACTION_DIRECTION(HttpStatus.BAD_REQUEST), 
 	INVALID_AMOUNT(HttpStatus.BAD_REQUEST),
