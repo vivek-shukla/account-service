@@ -10,7 +10,7 @@ public final class Constants {
 		//private constructor to hide explicit implementation
 	}
     
-	public static final String VERSION = "/v1";
+	public static final String VERSION = "/v1/api";
 	
 	public static final String CREATE_ACCOUNT_URL = "/create-account";
 

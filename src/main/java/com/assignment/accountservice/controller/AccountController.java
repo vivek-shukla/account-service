@@ -24,6 +24,8 @@ import com.assignment.accountservice.model.TransactionResponseModel;
 import com.assignment.accountservice.service.AccountService;
 import com.assignment.accountservice.util.Constants;
 
+import io.swagger.annotations.ApiOperation;
+
 @RestController
 @RequestMapping(path = Constants.VERSION)
 public class AccountController {
@@ -40,6 +42,7 @@ public class AccountController {
 	 * @return ResponseEntity
 	 * 
 	 */
+	@ApiOperation(value = "Create new account for given customer id")
 	@PostMapping(path = Constants.CREATE_ACCOUNT_URL,consumes = MediaType.APPLICATION_JSON_VALUE, 
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<AccountResponseModel> createAccount(@RequestBody(required = true) @Valid AccountRequestModel accountDTO) throws AccountServiceException{
@@ -55,6 +58,7 @@ public class AccountController {
 	 * @return ResponseEntity
 	 * 
 	 */
+	@ApiOperation(value = "Get account information for given account id")
 	@GetMapping(path = Constants.GET_ACCOUNT_URL,produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<AccountResponseModel> fetchByAccountId(@PathVariable(required = true,name = "accountId") Long accountId) 
 			throws AccountServiceException{		
@@ -69,6 +73,7 @@ public class AccountController {
 	 * @return ResponseEntity
 	 * 
 	 */
+	@ApiOperation(value = "Create transaction for given account")
 	@PostMapping(path = Constants.CREATE_TRANSACTION_URL,consumes = MediaType.APPLICATION_JSON_VALUE, 
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<TransactionResponseModel> createTransaction(@RequestBody(required = true) @Valid TransactionRequestModel transactionModel) throws AccountServiceException{
@@ -84,6 +89,7 @@ public class AccountController {
 	 * @return ResponseEntity
 	 * 
 	 */
+	@ApiOperation(value = "Get transactions for given account id")
 	@GetMapping(path = Constants.GET_TRANSACTION_URL,produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<TransactionResponseModel>> fetchTransactionByAccountId(@PathVariable(required = true,name = "accountId") Long accountId) 
 			throws AccountServiceException{
